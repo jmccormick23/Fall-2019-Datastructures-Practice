@@ -30,13 +30,61 @@ int numNodes(Node<int>* head) {
 }
 
 void printv(Node<int>* list) {
+	Node<int>* temp = list;
 
 	do {
-		cout << list->data << ' ';
-		list = list->next;
-	} while (list->next != NULL);
+		cout << temp->data << ' ';
+		temp = temp->next;
+	} while (temp->next != NULL);
 
-	cout << list->data << endl;
+	cout << temp->data << endl;
+}
+
+void delNode(Node<int>* head, Node<int>* n) { 
+	Node<int>* prev = head;
+
+	// Check if node exists in the list
+	if (prev->next == NULL)
+	{
+		cout << "\nThe node is not in the list.";
+		return;
+	}
+
+	// finds the previous node  
+	while (prev->next != NULL && prev->next != n)
+		prev = prev->next;
+
+	// Removes the node from the list  
+	prev->next = prev->next->next;
+
+	// deletes node 
+	free(n);
+
+	// if node is the head
+	if (head == n)
+	{
+		if (head->next == NULL)
+		{
+			cout << " The list can't be made empty ";
+			return;
+		}
+
+		// Copy the data of next node to head
+		head->data = head->next->data;
+
+		// store address of next node  
+		n = head->next;
+
+		// Remove the link of next node  
+		head->next = head->next->next;
+
+		// free memory  
+		free(n);
+
+		return;
+	}
+
+	return;
 }
 
 int main()
@@ -47,9 +95,16 @@ int main()
 
 	createNode(head, 5);
 	createNode(head, 4);
+	createNode(head, 10);
+	createNode(head, 47);
 	createNode(head, 22);
 
 	cout << numNodes(head) << endl;
+
+	printv(head);
+
+	delNode(head, head->next->next); // breaks for some reason
+
 	printv(head);
 
 	return 0;
